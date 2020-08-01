@@ -1,3 +1,10 @@
+# Changelog
+
+## 1.2.1
+
+* bumped iOS minimum dependency to 9.0
+* Update Mixpanel-swift dependency version 2.7.6
+
 ## 1.1.1
 
 * Update Mixpanel-swift dependency version.
