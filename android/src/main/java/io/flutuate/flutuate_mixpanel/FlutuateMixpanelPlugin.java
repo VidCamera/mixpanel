@@ -96,6 +96,9 @@ implements FlutterPlugin, MethodCallHandler
             case "identify":
                 identify(call, result);
                 break;
+            case "enableLogging":
+                enableLogging(call, result);
+                break;
             default:
                 result.notImplemented();
                 break;
@@ -188,5 +191,9 @@ implements FlutterPlugin, MethodCallHandler
         String distinctId = call.argument("distinctId");
         mixpanel.identify(distinctId);
         result.success(null);
+    }
+
+    private void enableLogging(MethodCall call, Result result) {
+        result.error("", "In order to enable logging on Android follow instructions here: https://developer.mixpanel.com/docs/android#debugging-and-logging", null);
     }
 }

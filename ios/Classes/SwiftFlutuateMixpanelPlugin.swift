@@ -42,6 +42,9 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
         case "identify":
             self.identify(call: call, result: result)
             break
+        case "enableLogging":
+            self.enableLogging(call: call, result: result)
+            break
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -129,6 +132,16 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
         }
         
         Mixpanel.mainInstance().identify(distinctId: distinctId);
+        
+        result(nil)
+    }
+    
+    private func enableLogging(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let enable = call.arguments as? Bool else {
+            return result(FlutterError(code: "", message: "Missing boolean argument", details: nil))
+        }
+        
+        Mixpanel.mainInstance().loggingEnabled = enable
         
         result(nil)
     }

@@ -118,4 +118,8 @@ class MixpanelAPI {
   void reset() {
     _channel.invokeMethod<void>('reset');
   }
+
+  void enableLogging(bool enable) {
+    _channel.invokeMethod<void>('enableLogging', enable);
+  }
 }
