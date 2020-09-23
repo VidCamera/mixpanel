@@ -75,20 +75,56 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
     }
     
     private func flush(result: @escaping FlutterResult) {
-        Mixpanel.mainInstance().flush {
-            result(nil)
-        }
+        Mixpanel.mainInstance().flush()
     }
     
     private func track(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let arguments = call.arguments as? [String: Any] ?? [:]
-        
-        let eventName = arguments["eventName"] as? String
-        let properties = arguments["properties"] as? Properties
-        
-        Mixpanel.mainInstance().track(event: eventName, properties: properties)
-        
-        result(nil)
+        let arguments = call.arguments as? [String:Any]
+        let eventName = arguments?["eventName"] as? String
+        let properties = arguments?["properties"] as? [String: Any]
+        let mappedProperties = mapDictionary(properties: properties)
+        Mixpanel.mainInstance().track( event: eventName, properties: mappedProperties);
+    }
+    
+    private func mapDictionary(properties: [String: Any]?) -> Properties? {
+        guard let properties = properties else { return nil }
+        return properties.compactMapValues { property -> MixpanelType? in
+            return map(property: property)
+        }
+    }
+    
+    private func mapArray(properties: [Any]?) -> MixpanelType? {
+        guard let properties = properties else { return nil }
+        return properties.compactMap { property -> MixpanelType? in
+            return map(property: property)
+        }
+    }
+    
+    private func map(property: Any) -> MixpanelType? {
+        if let property = property as? String {
+            return property as MixpanelType
+        } else if let property = property as? Int {
+            return property as MixpanelType
+        } else if let property = property as? UInt {
+            return property as MixpanelType
+        } else if let property = property as? Double {
+            return property as MixpanelType
+        } else if let property = property as? Float {
+            return property as MixpanelType
+        } else if let property = property as? Bool {
+            return property as MixpanelType
+        } else if let property = property as? Date {
+            return property as MixpanelType
+        } else if let property = property as? URL {
+            return property as MixpanelType
+        } else if let property = property as? NSNull {
+            return property as MixpanelType
+        } else if let arrayProperties = property as? [Any] {
+            return mapArray(properties: arrayProperties)
+        } else if let dictProperties = property as? [String: Any] {
+            return mapDictionary(properties: dictProperties)
+        }
+        return nil
     }
     
     private func trackMap(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -97,8 +133,7 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
     
     private func getDeviceInfo(result: @escaping FlutterResult) {
         //TODO verify is exists// let map = Mixpanel.mainInstance().getDeviceInfo() as? Dictionary<String, String>
-        let map: [String:String] = [:]
-        
+        let map : [String:String] = [:]
         result(map);
     }
     
@@ -108,32 +143,20 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
     
     private func optInTracking(result: @escaping FlutterResult) {
         Mixpanel.mainInstance().optInTracking()
-        
-        result(nil)
     }
     
     private func optOutTracking(result: @escaping FlutterResult) {
         Mixpanel.mainInstance().optOutTracking()
-        
-        result(nil)
     }
     
     private func reset(result: @escaping FlutterResult) {
         Mixpanel.mainInstance().reset()
-        
-        result(nil)
     }
     
     private func identify(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let arguments = call.arguments as? [String : Any] ?? [:]
-        
-        guard let distinctId = arguments["distinctId"] as? String else {
-            return result(FlutterError(code: "", message: "Missing `distinctId` argument", details: nil))
-        }
-        
+        let arguments = call.arguments as? [String : Any]
+        let distinctId = (arguments?["distinctId"] as? String)!
         Mixpanel.mainInstance().identify(distinctId: distinctId);
-        
-        result(nil)
     }
     
     private func enableLogging(call: FlutterMethodCall, result: @escaping FlutterResult) {
