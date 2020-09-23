@@ -143,20 +143,28 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
     
     private func optInTracking(result: @escaping FlutterResult) {
         Mixpanel.mainInstance().optInTracking()
+        
+        result(nil)
     }
     
     private func optOutTracking(result: @escaping FlutterResult) {
         Mixpanel.mainInstance().optOutTracking()
+        
+        result(nil)
     }
     
     private func reset(result: @escaping FlutterResult) {
         Mixpanel.mainInstance().reset()
+        
+        result(nil)
     }
     
     private func identify(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? [String : Any]
         let distinctId = (arguments?["distinctId"] as? String)!
         Mixpanel.mainInstance().identify(distinctId: distinctId);
+        
+        result(nil)
     }
     
     private func enableLogging(call: FlutterMethodCall, result: @escaping FlutterResult) {
