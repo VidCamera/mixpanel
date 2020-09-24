@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.3
+
+* Enabled user properties for iOS devices
+
 ## 1.2.2
 
 * merged from original repository

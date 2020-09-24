@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutuate_mixpanel'
-  s.version          = '1.2.2'
+  s.version          = '1.2.3'
   s.summary          = 'A Flutter plugin for use the Mixpanel API for Android devices.'
   s.description      = <<-DESC
 A Flutter plugin for use the Mixpanel API for Android devices.

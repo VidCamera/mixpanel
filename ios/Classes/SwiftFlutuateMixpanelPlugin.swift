@@ -42,6 +42,9 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
         case "identify":
             self.identify(call: call, result: result)
             break
+        case "setIdentifiedProperties":
+            self.setIdentifiedProperties(call: call, result: result)
+            break
         case "enableLogging":
             self.enableLogging(call: call, result: result)
             break
@@ -129,6 +132,16 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
     
     private func trackMap(call: FlutterMethodCall, result: @escaping FlutterResult) {
         track(call: call, result: result)
+    }
+    
+    private func setIdentifiedProperties(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let arguments = call.arguments as? [String:Any]
+        let properties = arguments?["properties"] as? [String: Any]
+        if let mappedProperties = mapDictionary(properties: properties) {
+            Mixpanel.mainInstance().people.set(properties: mappedProperties)
+        }
+        
+        result(nil)
     }
     
     private func getDeviceInfo(result: @escaping FlutterResult) {
